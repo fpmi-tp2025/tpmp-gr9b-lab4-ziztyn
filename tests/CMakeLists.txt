@@ -4,6 +4,7 @@ include_directories(${GTEST_INCLUDE_DIRS})
 
 # Добавляем исходные файлы для тестов
 set(TEST_SOURCES
+    main.cpp           # Добавляем main.cpp
     test_user.cpp
     test_broker.cpp
     test_product.cpp
@@ -43,7 +44,12 @@ add_custom_command(TARGET run_tests POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/data
 )
 
-# Инициализируем тестовую базу данных (используем тестовую версию)
+# Создаем директорию для SQL-скриптов
+add_custom_command(TARGET run_tests POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/sql
+)
+
+# Копируем SQL-скрипт в директорию сборки тестов
 add_custom_command(TARGET run_tests POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     ${CMAKE_SOURCE_DIR}/sql/init_db.sql
@@ -56,7 +62,7 @@ find_program(SQLITE3_EXECUTABLE sqlite3)
 if(SQLITE3_EXECUTABLE)
     add_custom_command(TARGET run_tests POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E echo "Initializing test database..."
-        COMMAND ${SQLITE3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/data/test_db.sqlite < ${CMAKE_SOURCE_DIR}/sql/init_db.sql
+        COMMAND ${SQLITE3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/data/test_db.sqlite ".read ${CMAKE_CURRENT_BINARY_DIR}/sql/init_db.sql"
         COMMENT "Initializing test database with SQL script"
     )
 endif()

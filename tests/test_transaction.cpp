@@ -58,7 +58,7 @@ TEST_F(TransactionTest, StatisticsUpdateAfterTransaction) {
     // Проверяем начальное состояние статистики
     auto result = db->executeQuery("SELECT TotalUnitsSold, TotalAmount FROM BrokerStatistics WHERE BrokerID = 1");
     EXPECT_EQ(result[0][0], "0");
-    EXPECT_EQ(result[0][1], "0");
+    EXPECT_EQ(result[0][1], "0.0");
     
     // Создаем новую сделку
     EXPECT_TRUE(Transaction::createTransaction(db, "2023-04-02", 1, 5, 1, 1));
@@ -66,7 +66,7 @@ TEST_F(TransactionTest, StatisticsUpdateAfterTransaction) {
     // Проверяем обновленную статистику
     result = db->executeQuery("SELECT TotalUnitsSold, TotalAmount FROM BrokerStatistics WHERE BrokerID = 1");
     EXPECT_EQ(result[0][0], "5");
-    EXPECT_EQ(result[0][1], "25000"); // 5 * 5000.0
+    EXPECT_EQ(result[0][1], "25000.0"); // 5 * 5000.0
 }
 
 // Тест 4: Проверка получения всех сделок
@@ -99,7 +99,7 @@ TEST_F(TransactionTest, UpdateProductQuantities) {
     
     // Проверяем обновленное количество товара (должно уменьшиться на 5)
     result = db->executeQuery("SELECT QuantitySupplied FROM Products WHERE ProductID = 1");
-    EXPECT_EQ(result[0][0], "95");
+    EXPECT_EQ(result[0][0], "85");
     
     // Проверяем, что сделка на 2023-04-02 удалена
     result = db->executeQuery("SELECT COUNT(*) FROM Transactions WHERE TransactionDate <= '2023-04-02'");

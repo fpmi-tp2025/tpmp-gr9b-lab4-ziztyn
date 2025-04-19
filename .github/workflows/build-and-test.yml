@@ -1,0 +1,50 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install SQLite
+      run: sudo apt-get install -y sqlite3 libsqlite3-dev
+    
+    - name: Install gcc and g++
+      run: sudo apt-get install -y build-essential
+      
+    - name: Install gcovr for coverage reports
+      run: |
+        python -m pip install --upgrade pip
+        pip install gcovr
+    
+    - name: Create build directory
+      run: mkdir -p build
+      
+    - name: Build project
+      run: |
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+        make
+    
+    - name: Run tests
+      run: |
+        cd build
+        ctest --verbose
+    
+    - name: Generate coverage report
+      run: |
+        cd build
+        gcovr -r .. --html --html-details -o coverage.html
+    
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-report
+        path: build/coverage.html
