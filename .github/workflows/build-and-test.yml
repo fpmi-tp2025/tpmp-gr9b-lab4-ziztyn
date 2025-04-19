@@ -11,40 +11,60 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    
+    - uses: actions/checkout@v2
+
+    # Обновляем пакеты и устанавливаем SQLite
     - name: Install SQLite
-      run: sudo apt-get install -y sqlite3 libsqlite3-dev
-    
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y sqlite3 libsqlite3-dev
+
+    # Устанавливаем gcc и g++
     - name: Install gcc and g++
       run: sudo apt-get install -y build-essential
-      
+
+    # Устанавливаем Google Test (из пакета libgtest-dev и компилируем его)
+    - name: Install Google Test
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgtest-dev
+        cd /usr/src/googletest
+        sudo cmake .
+        sudo make
+        sudo cp lib/*.a /usr/lib/
+
+    # Устанавливаем gcovr для формирования отчёта покрытия
     - name: Install gcovr for coverage reports
       run: |
         python -m pip install --upgrade pip
         pip install gcovr
-    
+
+    # Создаем директорию для сборки
     - name: Create build directory
       run: mkdir -p build
-      
+
+    # Сборка проекта (учитывая, что CMake ищет нужные библиотеки, включая GTest)
     - name: Build project
       run: |
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
         make
-    
+
+    # Запуск тестов
     - name: Run tests
       run: |
         cd build
         ctest --verbose
-    
+
+    # Генерация отчёта покрытия
     - name: Generate coverage report
       run: |
         cd build
         gcovr -r .. --html --html-details -o coverage.html
-    
+
+    # Загрузка отчёта в артефакт
     - name: Upload coverage report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v2
       with:
         name: coverage-report
         path: build/coverage.html
