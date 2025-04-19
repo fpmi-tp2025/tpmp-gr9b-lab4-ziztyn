@@ -195,7 +195,7 @@ void showManagementMenu(std::shared_ptr<Database> db, User& user) {
                 int productChoice;
                 std::cin >> productChoice;
                 
-                if (std::cin.fail() || productChoice < 1 || productChoice > static_cast(products.size())) {
+                if (std::cin.fail() || productChoice < 1 || productChoice > static_cast<int>(products.size())) {
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     std::cout << "Некорректный выбор.\n";
@@ -318,7 +318,7 @@ void showManagementMenu(std::shared_ptr<Database> db, User& user) {
                 int supplierChoice;
                 std::cin >> supplierChoice;
                 
-                if (std::cin.fail() || supplierChoice < 1 || supplierChoice > static_cast(suppliers.size())) {
+                if (std::cin.fail() || supplierChoice < 1 || supplierChoice > static_cast<int>(suppliers.size())) {
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     std::cout << "Некорректный выбор.\n";
@@ -343,8 +343,7 @@ void showManagementMenu(std::shared_ptr<Database> db, User& user) {
                 );
                 
                 clearScreen();
-                std::cout << "=== Анализ продаж товаров поставщика '" << suppliers[supplierChoice - 1][1]
-                          << "' по маклерам ===\n\n";
+                std::cout << "=== Анализ продаж товаров поставщика '" << suppliers[supplierChoice - 1][1]<< "' по маклерам ===\n\n";
                 
                 if (result.empty()) {
                     std::cout << "Нет данных о продажах для указанного поставщика.\n";
