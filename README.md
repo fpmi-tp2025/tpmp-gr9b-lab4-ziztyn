@@ -9,28 +9,19 @@
 ## [Database](db.md)
 
 ## Установка
-
-1. Клонировать репозиторий с проектом:
-```bash
-git clone https://github.com/yourusername/perfume-bazaar.git
-cd perfume-bazaar
-```
-
-2. Установите необходимые зависимости:
+1. Установите необходимые зависимости:
 ```bash
 sudo apt-get update
 sudo apt-get install build-essential cmake libsqlite3-dev
 ```
 
-3. Создайте директорию для сборки проекта и соберите приложение:
+2. Соберите приложение:
 ```bash
-mkdir build
-cd build
 cmake ..
 make
 ```
 
-4. Создайте директорию для данных и инициализируйте базу данных:
+3. Создайте директорию для данных и инициализируйте базу данных:
 ```bash
 mkdir -p ../data
 sqlite3 ../data/perfume_db.sqlite < ../sql/init_db.sql
