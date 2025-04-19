@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     # Обновляем пакеты и устанавливаем SQLite
     - name: Install SQLite
@@ -64,7 +64,7 @@ jobs:
 
     # Загрузка отчёта в артефакт
     - name: Upload coverage report
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: coverage-report
         path: build/coverage.html
