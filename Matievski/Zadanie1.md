@@ -3,12 +3,13 @@
 *Вариант:* Товар
 
 #### 1. Use Case Diagram
-![Use Case](q12p2.png)  
-**Сценарий:** Добавление товара...
+![Use Case](q1p6.png)  
 
 #### 2. Activity Diagrams
 - Аутентификация:  
-![Auth Activity](q12p1.png)   
+![Auth Activity](q12p1.png)
+- Добавление товара
+![Adding](q12p2.png)  
 
 #### 3. Class Diagram
 ![Class Diagram](q12p3.png)  
